@@ -1,11 +1,29 @@
-const watsonAssistant = require('watson-developer-cloud/assistant/v1')
 
-// Construindo uma instância do chatbot (IBM Watson)
-const assistant = new watsonAssistant({
-    version: '2019-03-11',
-    username: 'apikey',
-    password: 'tW6LFXalQe0hdoO2Xlb7Mz1jJQxby79GN2_dkUMgrbxz',
-    url: 'https://gateway.watsonplatform.net/assistant/api'
-})
+var express = require('express');
+var router = express.Router();
+const watsonAssistant = require('../config/watsonConfig');
 
-module.exports = assistant
+router.post('/',function(req,res,next){
+  var { text, context } = req.body;
+  context = json.parse(context);
+
+  const params = {
+    input: {text},
+    workspace_id: '365cd98a-c82b-4af1-b03b-b26216d5237e',
+    context
+  };
+
+  watsonAssistant.message(
+    params,
+    function(err, response){
+      if(err)
+        res.json({ status : 'ERRO', data: err});
+      else{
+          console.log(response);
+          res.json({ status : 'OK', data : response});
+        }
+    }
+  );
+});
+
+module.exports = router;
