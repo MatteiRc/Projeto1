@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Puc: Watson Assistant!' });
+  res.render('index', { title: 'PUC Campinas' });
 });
 
 module.exports = router;

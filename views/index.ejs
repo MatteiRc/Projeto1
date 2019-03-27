@@ -1,12 +1,61 @@
 <!DOCTYPE html>
-<HTML>
-    <HEAD>
+<html>
+    <head>
         <title><%= title %></title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
-    </HEAD> 
-    <BODY>
-        <H1 style="color:#FFFFFF; font-style: italic;"><%= title %></H1>
-        <P style="color: #FFFFFF;font-style: Arial; font-weight: 900"> NÃO PERCA TEMPO!!! SEJA O PRIMEIRO A EXPERIMENTAR O NOVO CHATBOT CRIADO PARA A 
-          NOSSA FACULDADE. BASTA <a href="https://assistant-us-south.watsonplatform.net/us-south/crn:v1:bluemix:public:conversation:us-south:a~2F2f6f0c279bd3497d86a7da7946f683cd:d9b8f747-03f1-4767-8478-d19d133b9e6a::/workspaces/365cd98a-c82b-4af1-b03b-b26216d5237e/build/intents">CLICAR AQUI</a>.</P>        
-    </BODY> 
-</HTML>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            // variável para controlar o contexto do diálogo
+            var context = '{}';
+            function enviarMensagem() {
+                // recupera mensagem digitada pelo usuário e exibe na tela
+                var texto = document.chatForm.texto.value;
+                chat = document.getElementById('chat');
+                chat.innerHTML += texto + "<br>";
+                // cria objeto para envio para a API
+                var input = {
+                    text: texto,
+                    context
+                };
+                // post para o serviço criado
+                $.ajax({
+                    url: 'watsonAssistant',
+                    type: 'post',
+                    data: input,
+                    // tratamento de erro do post
+                    error: function (dados) {
+                        alert('Erro1: ' + dados.data);
+                    },
+                    // tratamento de sucesso de processamento do post
+                    success: function (dados) {
+                        // se ocorreu algum erro no processamento da API
+                        if (dados.status === 'ERRO')
+                            alert('Erro2: ' + dados.data);
+                        // caso os dados tenham retornado com sucesso
+                        else{
+                            // exibe retorno da API e recupera o contexto para o próximo diálogo
+                            chat.innerHTML += dados.data.output.text + "<br>";
+                            context = JSON.stringify(dados.data.context);
+                        }
+                    }
+                });
+            }
+        </script>
+    </head> 
+    <body>
+        <div class="textos">
+            <h1><%= title %></h1>
+            <p> Conheça nosso Chatbot desenvolvido para sanar suas dúvidas sobre a PUCCAMP!</p>
+        </div>
+        
+        <div class="box">
+            <div id="chat"></div>
+            <form id="envio" name="chatForm" method="post">
+                <input  id="caixa" type="text" name="texto" value="Digite algo..." onfocus="this.value=''"/>
+                <input id="botao" type="button" onClick="enviarMensagem();" value="Enviar">
+            </form>
+        </div>
+    </body> 
+</html>
