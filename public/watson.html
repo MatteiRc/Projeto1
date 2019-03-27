@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/watson.css' />
     <title>watson-app</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
@@ -26,13 +27,13 @@
                 data: input,
                 // tratamento de erro do post
                 error: function (dados) {
-                    alert('Erro: ' + dados.data);
+                    alert('Erro1: ' + dados.data);
                 },
                 // tratamento de sucesso de processamento do post
                 success: function (dados) {
                     // se ocorreu algum erro no processamento da API
                     if (dados.status === 'ERRO')
-                        alert('Erro: ' + dados.data);
+                        alert('Erro2: ' + dados.data);
                     // caso os dados tenham retornado com sucesso
                     else{
                         // exibe retorno da API e recupera o contexto para o próximo diálogo
@@ -46,11 +47,13 @@
 </head>
 
 <body>
-    <form name="chatForm" method="post">
-        <input type="text" name="texto" />
-        <input type="button" onClick="enviarMensagem();" value="Enviar">
-    </form>
     <div id="chat"></div>
+    <div id="textBox" style="">
+        <form id="envio" name="chatForm" method="post">
+            <input  id="caixa" type="text" name="texto" value="Digite algo..." onfocus="this.value=''"/>
+            <input id="botao" type="button" onClick="enviarMensagem();" value="Enviar">
+        </form>
+    </div>
 </body>
 
 </html>
